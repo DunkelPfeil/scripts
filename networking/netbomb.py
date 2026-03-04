@@ -168,12 +168,42 @@ def hr():
 def progress_bar(current, total, width=40, label=""):
     pct = current / max(total, 1)
     filled = int(width * pct)
-    bar = C["ok"] + "█"*filled + C["dim"] + "░"*(width-filled)
+    remaining = width - filled
+
+    # burnt fuse (left side): dark char that looks like ash/char
+    burnt  = Fore.RED + Style.DIM  + "─" * max(0, filled - 1)
+
+    # spark tip — animated flicker between frames
+    spark_frames = ["✸", "✺", "✹", "✷", "★", "✦"]
+    spark_char   = spark_frames[current % len(spark_frames)]
+    if filled == 0:
+        spark = ""
+    elif filled >= width:
+        spark = Fore.YELLOW + Style.BRIGHT + "💥"
+    else:
+        spark = Fore.YELLOW + Style.BRIGHT + spark_char
+
+    # unburnt fuse (right side)
+    unburnt = Fore.WHITE + Style.DIM + "~" * remaining
+
+    # bomb on the right end
+    bomb = Fore.WHITE + Style.BRIGHT + "💣"
+
     pct_str = f"{pct*100:5.1f}%"
-    sys.stdout.write(f"\r  {bar}{C['reset']}  {C['highlight']}{pct_str}{C['reset']}  {C['dim']}{label}{C['reset']}  ")
+
+    sys.stdout.write(
+        f"\r  {burnt}{spark}{unburnt}{bomb}  "
+        f"{C['warn']}{pct_str}{C['reset']}  "
+        f"{C['dim']}{str(label)[:30]}{C['reset']}  "
+    )
     sys.stdout.flush()
     if current >= total:
-        print()
+        sys.stdout.write(
+            f"\r  {Fore.RED + Style.DIM}{'─' * width}{C['reset']}  "
+            f"{Fore.YELLOW + Style.BRIGHT}{'💥'}{C['reset']}  "
+            f"{C['ok']}100.0%{C['reset']}  {C['dim']}{str(label)[:30]}{C['reset']}  \n"
+        )
+        sys.stdout.flush()
 
 # ── network utilities ──────────────────────────────────────────────────────────
 def resolve_host(target):
