@@ -6,20 +6,19 @@ These scripts are developed while studying and teaching offensive and defensive 
 ## Categories
 
 Reconnaissance
-- Port scanners
-- Banner grabbing
-- DNS enumeration
+- Recon based tools
 
 Networking
-- Packet capture tools
-- Socket programming examples
+- Network related tools
 
 Automation
-- Log parsing
-- Monitoring scripts
+- Tools to make life easier
 
 Utilities
 - Small tools for common security tasks
+
+Exploitation
+- Tools for exploitation. Use at own risk and only when authorized.
 
 ## Languages
 
